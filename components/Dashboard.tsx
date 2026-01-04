@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { AppView } from '../types';
 import { 
   Shield, 
@@ -9,9 +9,12 @@ import {
   ChevronRight, 
   CheckCircle2,
   MessageSquare,
-  Camera
+  Camera,
+  RefreshCw,
+  ExternalLink
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { chatWithSearch } from '../services/geminiService';
 
 const safetyData = [
   { name: '08:00', score: 98 },
@@ -27,18 +30,53 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
+  const [liveAlert, setLiveAlert] = useState<{ text: string, links?: any[] } | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const fetchLiveAlerts = async () => {
+    setIsRefreshing(true);
+    try {
+      const result = await chatWithSearch("Provide a very brief safety update or weather warning for tourists in India today. One short sentence.");
+      setLiveAlert({ text: result.text, links: result.groundingLinks });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
       {/* Alert Banner */}
-      <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-start gap-4">
-        <div className="bg-amber-100 p-2 rounded-lg">
+      <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-start gap-4 shadow-sm">
+        <div className="bg-amber-100 p-2 rounded-lg shrink-0">
           <AlertCircle className="w-5 h-5 text-amber-600" />
         </div>
         <div className="flex-1">
-          <h4 className="font-bold text-amber-900">Regional Weather Alert: Heavy Fog</h4>
-          <p className="text-amber-800 text-sm">Reduced visibility reported in Uttarakhand region. Drive with caution near mountain passes.</p>
+          <div className="flex items-center justify-between mb-1">
+            <h4 className="font-bold text-amber-900">Live Safety Intelligence</h4>
+            <button 
+              onClick={fetchLiveAlerts} 
+              disabled={isRefreshing}
+              className="flex items-center gap-1 text-[10px] font-black uppercase text-amber-600 hover:text-amber-800 transition-colors"
+            >
+              <RefreshCw className={`w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`} />
+              {isRefreshing ? 'Syncing...' : 'Sync with Search'}
+            </button>
+          </div>
+          <p className="text-amber-800 text-sm leading-relaxed">
+            {liveAlert ? liveAlert.text : "Regional Weather Alert: Heavy Fog reported in Uttarakhand region. Drive with caution near mountain passes."}
+          </p>
+          {liveAlert?.links && liveAlert.links.length > 0 && (
+            <div className="mt-2 flex gap-2">
+              {liveAlert.links.slice(0, 1).map((l, i) => (
+                <a key={i} href={l.web?.uri} target="_blank" className="flex items-center gap-1 text-[10px] font-bold text-amber-700 underline">
+                  Read Full Report <ExternalLink className="w-2 h-2" />
+                </a>
+              ))}
+            </div>
+          )}
         </div>
-        <button className="text-amber-700 text-sm font-semibold hover:underline">Dismiss</button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -152,7 +190,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
               <MessageSquare className="w-8 h-8 mb-2 group-hover:scale-110 transition-transform" />
               <div className="text-left">
                 <p className="font-bold">Ask AI Guide</p>
-                <p className="text-xs text-orange-200">Local insights & help</p>
+                <p className="text-xs text-orange-200">Pro reasoning & grounding</p>
               </div>
             </button>
             <button 
@@ -162,7 +200,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
               <Camera className="w-8 h-8 mb-2 group-hover:scale-110 transition-transform" />
               <div className="text-left">
                 <p className="font-bold">Identify</p>
-                <p className="text-xs text-slate-400">Landmark scanner</p>
+                <p className="text-xs text-slate-400">Pro Landmark scanner</p>
               </div>
             </button>
           </div>

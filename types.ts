@@ -12,7 +12,7 @@ export enum AppView {
 export interface User {
   id: string;
   name: string;
-  idNumber: string; // Aadhaar/Passport mock
+  idNumber: string;
   verified: boolean;
   safetyScore: number;
   location: { lat: number; lng: number };
@@ -26,10 +26,16 @@ export interface GroupMember {
   location: { lat: number; lng: number };
 }
 
+export interface GroundingChunk {
+  web?: { uri: string; title: string };
+  maps?: { uri: string; title: string };
+}
+
 export interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  groundingLinks?: GroundingChunk[];
 }
 
 export interface LandmarkAnalysis {

@@ -1,34 +1,82 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Use process.env.API_KEY directly as required by SDK guidelines
 const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-export const chatWithAI = async (message: string, history: { role: 'user' | 'model', parts: { text: string }[] }[]) => {
+/**
+ * Standard Chat using Gemini 3 Pro for complex reasoning.
+ */
+export const chatWithPro = async (message: string, history: any[] = []) => {
   const ai = getAI();
-  
-  // Directly use ai.models.generateContent with model and prompt as recommended
   const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
+    model: 'gemini-3-pro-preview',
     contents: [
       ...history,
       { role: 'user', parts: [{ text: message }] }
     ],
     config: {
-      systemInstruction: 'You are the Bharat Yatra Assistant, an expert in Indian tourism, local safety, cultural landmarks, and emergency protocols. Provide helpful, accurate, and safety-conscious advice for tourists traveling in India.',
+      systemInstruction: 'You are the Bharat Yatra Pro Assistant. You provide deep, complex insights into Indian culture, travel planning, and legal/safety advice. Be thorough and highly accurate.',
+    },
+  });
+  return { text: response.text };
+};
+
+/**
+ * Search Grounded Chat using Gemini 3 Flash.
+ * Optimized for real-time safety alerts and travel advisories.
+ */
+export const chatWithSearch = async (message: string) => {
+  const ai = getAI();
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-flash-preview',
+    contents: [{ role: 'user', parts: [{ text: message }] }],
+    config: {
+      tools: [{ googleSearch: {} }],
+      systemInstruction: 'You are the Bharat Yatra Real-Time Safety & Advisories Assistant. Your absolute priority is the safety and well-being of tourists in India. Use Google Search to find and prioritize critical real-time information, including safety alerts, weather warnings, natural disaster updates, and official travel advisories. If a threat or risk exists, lead with that information clearly. Always provide actionable advice and cite your sources via grounding links.',
     },
   });
 
-  // Access the .text property directly (not a method)
-  return response.text;
+  const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+  return {
+    text: response.text,
+    groundingLinks: groundingChunks
+  };
 };
 
+/**
+ * Maps Grounded Chat using Gemini 2.5 Flash.
+ */
+export const chatWithMaps = async (message: string, lat?: number, lng?: number) => {
+  const ai = getAI();
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents: [{ role: 'user', parts: [{ text: message }] }],
+    config: {
+      tools: [{ googleMaps: {} }],
+      toolConfig: {
+        retrievalConfig: {
+          latLng: lat && lng ? { latitude: lat, longitude: lng } : undefined
+        }
+      },
+    },
+  });
+
+  const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+  return {
+    text: response.text,
+    groundingLinks: groundingChunks
+  };
+};
+
+/**
+ * Landmark Analysis using Pro for high-quality identification.
+ */
 export const analyzeLandmark = async (base64Image: string) => {
   const ai = getAI();
-  const prompt = "Identify this monument or landmark in India. Provide its name, a short description, 3 historical facts, and 2 safety tips for tourists visiting this location. Format the response as JSON with keys: name, description, historicalFacts (array), safetyTips (array).";
+  const prompt = "Identify this monument or landmark in India. Provide its name, a short description, 3 historical facts, and 2 safety tips. Return JSON with: name, description, historicalFacts (array), safetyTips (array).";
 
   const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
+    model: 'gemini-3-pro-preview',
     contents: {
       parts: [
         { inlineData: { data: base64Image, mimeType: 'image/jpeg' } },
@@ -50,6 +98,5 @@ export const analyzeLandmark = async (base64Image: string) => {
     }
   });
 
-  // Ensure parsing from .text property
   return JSON.parse(response.text || '{}');
 };

@@ -1,15 +1,18 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Loader2, Info } from 'lucide-react';
-import { chatWithAI } from '../services/geminiService';
+import { Send, Bot, User, Loader2, Info, Globe, MapPin, Sparkles, ExternalLink } from 'lucide-react';
+import { chatWithPro, chatWithSearch, chatWithMaps } from '../services/geminiService';
 import { Message } from '../types';
+
+type ChatMode = 'pro' | 'search' | 'maps';
 
 const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Namaste! I am your Bharat Yatra AI assistant. How can I help you explore India safely today?", timestamp: new Date() }
+    { role: 'assistant', content: "Namaste! I am your enhanced Bharat Yatra AI. Switch modes below to use Pro intelligence, Web Search, or Nearby Place search.", timestamp: new Date() }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [mode, setMode] = useState<ChatMode>('pro');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,8 +30,23 @@ const Chatbot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await chatWithAI(input, []);
-      const botMsg: Message = { role: 'assistant', content: response || "I'm sorry, I couldn't process that.", timestamp: new Date() };
+      let result;
+      if (mode === 'search') {
+        result = await chatWithSearch(input);
+      } else if (mode === 'maps') {
+        // Try to get actual location if possible
+        let lat = 28.6139, lng = 77.2090; // Default Delhi
+        result = await chatWithMaps(input, lat, lng);
+      } else {
+        result = await chatWithPro(input, []);
+      }
+
+      const botMsg: Message = { 
+        role: 'assistant', 
+        content: result.text || "I'm sorry, I couldn't process that.", 
+        timestamp: new Date(),
+        groundingLinks: result.groundingLinks
+      };
       setMessages(prev => [...prev, botMsg]);
     } catch (error) {
       console.error(error);
@@ -40,22 +58,49 @@ const Chatbot: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto h-full flex flex-col bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-      <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-white/50 backdrop-blur-md sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <div className="bg-orange-100 p-2 rounded-xl">
-            <Bot className="w-6 h-6 text-orange-600" />
+      {/* Header & Modes */}
+      <div className="p-4 border-b border-slate-100 bg-white/50 backdrop-blur-md sticky top-0 z-10">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="bg-orange-100 p-2 rounded-xl">
+              <Bot className="w-6 h-6 text-orange-600" />
+            </div>
+            <div>
+              <h3 className="font-bold text-slate-800">Bharat Yatra Intelligence</h3>
+              <p className="text-[10px] text-green-600 font-bold uppercase tracking-wider flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                Active System: {mode.toUpperCase()}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-bold text-slate-800">AI Travel Guide</h3>
-            <p className="text-[10px] text-green-600 font-bold uppercase tracking-wider flex items-center gap-1">
-              <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-              Powered by Gemini
-            </p>
-          </div>
+          <button className="p-2 text-slate-400 hover:text-slate-600">
+            <Info className="w-5 h-5" />
+          </button>
         </div>
-        <button className="p-2 text-slate-400 hover:text-slate-600">
-          <Info className="w-5 h-5" />
-        </button>
+
+        <div className="flex gap-2 p-1 bg-slate-100 rounded-2xl">
+          <button 
+            onClick={() => setMode('pro')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${mode === 'pro' ? 'bg-white text-orange-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            Gemini Pro
+          </button>
+          <button 
+            onClick={() => setMode('search')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${mode === 'search' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+          >
+            <Globe className="w-3.5 h-3.5" />
+            Search
+          </button>
+          <button 
+            onClick={() => setMode('maps')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${mode === 'maps' ? 'bg-white text-green-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            Nearby
+          </button>
+        </div>
       </div>
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -73,6 +118,29 @@ const Chatbot: React.FC = () => {
                 : 'bg-white text-slate-800 border-slate-100 rounded-tl-none'
               }`}>
                 <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                
+                {/* Grounding Links */}
+                {msg.groundingLinks && msg.groundingLinks.length > 0 && (
+                  <div className="mt-4 pt-3 border-t border-slate-100 space-y-2">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sources & Links</p>
+                    <div className="flex flex-wrap gap-2">
+                      {msg.groundingLinks.map((link, lIdx) => (
+                        <a 
+                          key={lIdx} 
+                          href={link.web?.uri || link.maps?.uri} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 border border-slate-100 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+                        >
+                          {link.web ? <Globe className="w-3 h-3" /> : <MapPin className="w-3 h-3" />}
+                          {link.web?.title || link.maps?.title || 'View Resource'}
+                          <ExternalLink className="w-2.5 h-2.5" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <p className={`text-[10px] mt-2 opacity-50 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
                   {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
@@ -86,9 +154,9 @@ const Chatbot: React.FC = () => {
               <div className="w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center">
                 <Bot className="w-4 h-4" />
               </div>
-              <div className="bg-white border border-slate-100 p-4 rounded-2xl flex items-center gap-2">
+              <div className="bg-white border border-slate-100 p-4 rounded-2xl flex items-center gap-2 shadow-sm">
                 <Loader2 className="w-4 h-4 animate-spin text-orange-600" />
-                <span className="text-xs text-slate-400">Assistant is thinking...</span>
+                <span className="text-xs text-slate-400">Gemini is processing...</span>
               </div>
             </div>
           </div>
@@ -102,7 +170,11 @@ const Chatbot: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask about landmarks, safety, or routes..."
+            placeholder={
+              mode === 'pro' ? "Ask anything..." : 
+              mode === 'search' ? "Ask about safety alerts, weather, or travel advisories..." : 
+              "Find nearby restaurants, ATMs, or help..."
+            }
             className="flex-1 bg-white border border-slate-200 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all text-sm"
           />
           <button

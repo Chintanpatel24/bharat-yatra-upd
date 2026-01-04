@@ -2,7 +2,7 @@
   
 ## "bharat-yatra"
 
-Smart tourist Safty Monitoring & Incident Response System using Ai, Gro-Fensing and Blockchain based - Digital Technology !!
+Smart tourist Safety Monitoring & Incident Response System using Ai, Gro-Fensing and Blockchain based - Digital Technology !!
 </div>
 
 ---

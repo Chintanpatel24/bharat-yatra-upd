@@ -7,7 +7,7 @@ Smart tourist Safty Monitoring & Incident Response System using Ai, Gro-Fensing 
 
 ---
 
-## Live Demo : [Tap to view](bharat-yatra-dart.vercel.app)
+## Live Demo : [Tap to view](https://bharat-yatra-dart.vercel.app/)
 
 ---
 

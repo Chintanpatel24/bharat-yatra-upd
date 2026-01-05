@@ -12,16 +12,15 @@ Smart tourist Safety Monitoring & Incident Response System using Ai, Gro-Fensing
  - <h3>open on a mobile for a batter experience.</h3>
 
  <div >
- <img align="right" src="images/qr.jpg" alt="QR code" width="200" height="200">
+ <img align="right" src="images/qr.jpg" alt="QR code" width="150" height="150">
  <pre>
- X          
- X          
- X          
- X       X   
- X       X X 
- X X X X X X X
-         X X 
-         X   
+ __  __       _     _ _            _                    ___  ____  
+|  \/  | ___ | |__ (_) | ___      / \   _ __  _ __     / _ \|  _ \ 
+| |\/| |/ _ \| '_ \| | |/ _ \    / _ \ | '_ \| '_ \   | | | | |_) |
+| |  | | (_) | |_) | | |  __/   / ___ \| |_) | |_) |  | |_| |  _ < 
+|_|  |_|\___/|_.__/|_|_|\___|  /_/   \_\ .__/| .__/    \__\_\_| \_\
+                                       |_|   |_|                   
+
 </pre>
 
 </div>

@@ -28,10 +28,6 @@ Smart tourist Safety Monitoring & Incident Response System using Ai, Gro-Fensing
 
 ---
 
-<img src="images/layout.jpg">
-
----
-
 - ## Summary !!
 
 - Bharat Yatra is a Bolckchain-based mobile application designed to improve tourist safety, connectivity, and experience during trips across India.
@@ -53,6 +49,10 @@ Smart tourist Safety Monitoring & Incident Response System using Ai, Gro-Fensing
 - All users are verified by the state government (like all users are verified by them passport visa plain tackit or tec .... this thing will done bt the one gove which is   the first visit place after it the user trail from the one state ot other state the data and daitles will be share or forverd by state to the other state). 
   
 - Additionally, a government danger-sign feature informs tourists about safe or risky areas and highlights must-visit places within a 45–50 km radius.
+
+---
+
+<img src="images/layout.jpg">
 
 ---
 

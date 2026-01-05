@@ -1,6 +1,6 @@
 <div align=center>
   
-## "bharat-yatra"
+# "bharat-yatra"
 
 Smart tourist Safety Monitoring & Incident Response System using Ai, Gro-Fensing and Blockchain based - Digital Technology !!
 </div>
@@ -39,7 +39,7 @@ Smart tourist Safety Monitoring & Incident Response System using Ai, Gro-Fensing
 
 ---
 
-- ## Description.
+- ## Description !!
 
 Bharat Yatra – Smart Tourist Safety & Monitoring App 
 
@@ -66,3 +66,5 @@ Bharat Yatra – Smart Tourist Safety & Monitoring App
 11. Challenges -> Handling massive real-time data (location sync). -> Managing network gaps in rural/remote areas. -> Gaining government adoption for ID-verification APIs. -> Ensuring smooth UX despite blockchain complexity. -> Cost of satellite fallback and real-time AI inference.
 
 12. Conclusion -> The Bharat Yatra Smart Tourist Safety & Monitoring App is not just a mobile application but an ecosystem built to ensure safe, verified, and intelligent travel in India. By combining blockchain identity, real-time AI, group management, SOS safety, and government-backed trust, it aims to become the future of digital tourism — where every traveler feels secure, connected, and empowered.
+
+---

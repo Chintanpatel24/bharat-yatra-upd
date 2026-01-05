@@ -1,133 +1,122 @@
 
-import React, { useState } from 'react';
-import { Users, MapPin, Phone, MessageCircle, MoreVertical, Plus, HeartPulse, X, Search, Check, Globe } from 'lucide-react';
-import { GroupMember } from '../types';
-
-const initialMembers: GroupMember[] = [
-  { id: '1', name: 'Arjun (Me)', status: 'active', lastSeen: 'Just now', location: { lat: 27.1751, lng: 78.0421 } },
-  { id: '2', name: 'Sneha', status: 'active', lastSeen: '2m ago', location: { lat: 27.1752, lng: 78.0422 } },
-  { id: '3', name: 'Amit', status: 'away', lastSeen: '15m ago', location: { lat: 27.1748, lng: 78.0418 } },
-  { id: '4', name: 'Rajesh', status: 'emergency', lastSeen: '1m ago', location: { lat: 27.1755, lng: 78.0425 } },
-];
+import React from 'react';
 
 const GroupManager: React.FC = () => {
-  const [members, setMembers] = useState<GroupMember[]>(initialMembers);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [newMemberName, setNewMemberName] = useState('');
-  const [isAdding, setIsAdding] = useState(false);
-
-  const handleAddMember = () => {
-    if (!newMemberName.trim()) return;
-    setIsAdding(true);
-    setTimeout(() => {
-      const newMember: GroupMember = {
-        id: Math.random().toString(36).substr(2, 9),
-        name: newMemberName,
-        status: 'active',
-        lastSeen: 'Just joined',
-        location: { lat: 27.1751, lng: 78.0421 }
-      };
-      setMembers([...members, newMember]);
-      setNewMemberName('');
-      setIsAdding(false);
-      setShowAddModal(false);
-    }, 1000);
-  };
+  const members = [
+    { name: 'Priya', distance: '200m', steps: '5.2k', status: 'online', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCJdDb3EghqUh0rsj5egI3U7q5WT5E2O22hzh6ILF3uVwlgOgHp9yU9cmvGjbZ9gYXd8znPTuDpxvzmtf4ZQVVdfuUnJAdAcj-gvyNWVrDKg2jdgHQJOJ9wAhW4oJ5Emqd3IrjR9fpl1YPJ1PRuSjyASUPNQMNfiFe0r_F8ubEBGoueEy5ADQpYsQZWpvE303xDx6sZMqdbodELxrVDe4qY6jP_dzsLy2prO-n_qiCj7s9tfL2URKyMDt9edI6LSgjbZ6_nbPfWKiQ" },
+    { name: 'Amit', distance: '1.2km', steps: '3.1k', status: 'away', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC5VwCJmHmaRfhBCvR88v8SwuHFDf5OYeFbG-dyMd-vbSggdzxWqlKf9JIuUtk4O92y23VevGsOs9GAYBPPpG5XD0UkHpRPgnU_bb2Nm-a4mfw8zgLk4bmt_5vorp75KGEDhR-aYauLiPKSc8jPRowFImI-ll5oEOyb4yhhGFz1NAMn7EVxTFFjts6rVMVBXFio_tSXFxl6oieQiLhHGfyP4ZCdf9VhNyW1WXWmyDE-_wfijV72zJVJdoIASLzFaD1dEjlWO6WbBuU" },
+    { name: 'Sarah', distance: '50m', steps: '8.9k', status: 'online', img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBQOqQPT6LhdgYE5Lde7OAlc25yT4YEqrlhKm-5fz86Lg_R7fPll2DeXHSDHHTwSNkNCpBBUcQ6jN6JEE6t1JrN-MvhBPNun97AzRZixD6RN3hrgLt28TZr7Ms32pJ0RYrWhTYw9Hqu6K0Sm8MfO4nX5NJwL8GxosPC9hfa-xUS59AePdB6VUZp9Fqd1iZRiGJ56L7pcpvu5Ov-_tUFAmeS39sOGnX64zQQuEszytvurgBbVZlZXLKUBi9OgGpTBsjCtMOIcUy7rwY" },
+  ];
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Family Trip '24</h2>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">{members.length} Members • Global Sat-Tracking Enabled</p>
+    <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
+      <header className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="size-12 rounded-full bg-cover bg-center ring-2 ring-primary/20" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8MRPb8F1ewheByZSm8x4miwtgGsebcL4NjglSjpUtCK_i4VaaSAUzYg8oBPU5QG1Yednnp9OjWxsgJzFAl-Aig875epK9u4P15bF_VMuvqXj9cEuxtI1VjKomyYusYZKDSNaI32ZjaR7lXrCkA5VG3ldNwGXAc-I5KgMGD27UtR2bvwCutxKs3O_168V2DX-pJ9_PTotClxCw8Htu2UB8mgJ2wv-G3ntRWN1anT3Ncf-Fw5wGhnREly195T1TkuIabB8TipD4Eq8')" }}></div>
+              <div className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full border-2 border-background-dark"></div>
+            </div>
+            <div>
+              <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Group Admin</p>
+              <h1 className="text-xl font-bold text-white leading-tight">Namaste, Rahul</h1>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 bg-[#1e2738] px-3 py-1.5 rounded-full border border-slate-700">
+            <span className="material-symbols-outlined text-primary text-[16px]">fingerprint</span>
+            <p className="text-[#92a4c9] text-xs font-mono font-bold tracking-wide">BY-8932</p>
+          </div>
         </div>
-        <div className="flex gap-3">
-          <button 
-            onClick={() => setShowAddModal(true)}
-            className="flex-1 sm:flex-none bg-orange-600 text-white px-8 py-4 rounded-2xl font-black hover:bg-orange-700 transition-all shadow-xl shadow-orange-100 dark:shadow-none flex items-center justify-center gap-3 active:scale-95"
-          >
-            <Plus className="w-6 h-6" />
-            Invite Member
-          </button>
+
+        <div className="flex items-center justify-between bg-[#192233] p-4 rounded-2xl shadow-sm border border-[#2d3a54]">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center rounded-lg bg-[#232f48] text-primary size-10">
+              <span className="material-symbols-outlined">share_location</span>
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white mb-1">Live Tracking</p>
+              <p className="text-xs text-slate-400">Visible to group & authorities</p>
+            </div>
+          </div>
+          <label className="relative flex items-center cursor-pointer">
+            <input type="checkbox" checked className="sr-only peer" />
+            <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+          </label>
+        </div>
+      </header>
+
+      <div className="relative overflow-hidden rounded-3xl bg-[#192233] border border-[#2d3a54] p-6">
+        <div className="absolute inset-0 opacity-10 bg-cover bg-center pointer-events-none" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQjTBuCt8NX21Vk3HJrt4JtpXqEKm0r0ht1lsNJBEQR_0XkoIfOfOnEmi2i7xBWKCvnD51UHHHc60UDJQ07-zmy6yCEl9QtG272yw23oCJIa5vauhdeXbvhQ7eckDATeWvVYX8g9v0Z1reQWTEGMlt-4EkaUGg2K2E293Ynp3d2w3xv6G6f-H_8Eq8VeiAdNsli7Pmy4hzNUeUXEv2jAR6lA3qoqO5JXugaMQ-yDEid1dSZAjlhZ8c2rOV3hxJZm0ngYiDb1H8Va4')" }}></div>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h3 className="text-[#92a4c9] text-xs font-bold uppercase tracking-wider mb-2">Current Zone Status</h3>
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-green-500 fill-1 text-3xl">verified_user</span>
+              <span className="text-3xl font-black text-white">Safe Zone</span>
+            </div>
+          </div>
+          <div className="bg-green-900/30 text-green-400 px-5 py-2 rounded-xl text-sm font-bold border border-green-800">
+            Level 1 Protection
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 space-y-4">
-          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] px-2">Satellite Status</h3>
-          <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2 scrollbar-hide">
-            {members.map((member) => (
-              <div key={member.id} className="bg-white dark:bg-slate-900 p-5 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4 transition-all hover:scale-[1.02] hover:shadow-md cursor-pointer">
-                <div className="relative shrink-0">
-                  <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 overflow-hidden shadow-inner border-2 border-white dark:border-slate-700">
-                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${member.id}`} alt={member.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-4 border-white dark:border-slate-800 ${
-                    member.status === 'active' ? 'bg-green-500' : 
-                    member.status === 'away' ? 'bg-amber-500' : 'bg-red-500 animate-pulse'
-                  }`}></div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-black text-slate-800 dark:text-white truncate">{member.name}</p>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Seen {member.lastSeen}</p>
-                </div>
-                <div className="flex gap-1">
-                  <button className="p-3 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-2xl hover:text-orange-600 transition-all"><Phone className="w-4 h-4" /></button>
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-bold text-white tracking-tight">My Yatra Group</h3>
+          <button className="text-primary text-sm font-bold">Manage</button>
         </div>
-
-        {/* Enhanced Map Simulation */}
-        <div className="lg:col-span-2 bg-slate-900 rounded-[3.5rem] border-[12px] border-slate-800 shadow-2xl overflow-hidden flex flex-col min-h-[500px] relative group">
-          <div className="absolute inset-0 bg-slate-900 opacity-20 pointer-events-none">
-            <div className="w-full h-full bg-[radial-gradient(#3b82f6_1px,transparent_1px)] bg-[length:40px_40px]"></div>
-          </div>
-          
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-             <div className="w-[80%] h-[80%] border border-white/5 rounded-full animate-[spin_20s_linear_infinite]"></div>
-             <div className="w-[60%] h-[60%] border border-white/5 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
-          </div>
-
-          <div className="p-6 border-b border-white/5 flex items-center justify-between relative z-10 bg-slate-900/50 backdrop-blur-md">
-            <h3 className="font-black text-white text-sm tracking-widest uppercase">Live Vector Map • GR-22</h3>
-            <div className="flex items-center gap-2 text-[10px] font-black text-green-500 tracking-widest uppercase">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-              Synchronized
-            </div>
-          </div>
-
-          <div className="flex-1 relative p-10">
-            {/* Topographic Lines Style Overlay */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/topography.png')]"></div>
-            
-            {members.map((member, i) => (
-              <div key={member.id} className="absolute transition-all duration-1000" style={{
-                top: `${25 + (i * 15)}%`,
-                left: `${30 + (i * 12)}%`
-              }}>
-                <div className="relative flex flex-col items-center animate-in fade-in zoom-in duration-1000">
-                  <div className="w-10 h-10 rounded-full border-4 border-white dark:border-slate-800 shadow-2xl overflow-hidden relative z-20 transition-transform hover:scale-125 cursor-pointer">
-                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${member.id}`} alt={member.name} />
-                  </div>
-                  <div className={`w-3 h-3 rotate-45 -mt-1.5 shadow-xl relative z-10 ${member.status === 'emergency' ? 'bg-red-500' : 'bg-white'}`}></div>
-                  <div className="mt-2 bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-                    <span className="text-[9px] font-black text-white uppercase tracking-widest">{member.name.split(' ')[0]}</span>
+        <div className="flex overflow-x-auto gap-4 pb-4 no-scrollbar snap-x">
+          {members.map((member, idx) => (
+            <div key={idx} className="snap-start flex flex-col items-center justify-between p-6 rounded-[2rem] bg-[#1e2738] min-w-[180px] border border-[#2d3a54] shadow-xl">
+              <div className="flex flex-col items-center gap-3 w-full">
+                <div className="relative">
+                  <div className="size-16 rounded-full bg-cover bg-center border-2 border-[#2d3a54]" style={{ backgroundImage: `url("${member.img}")` }}></div>
+                  <div className={`absolute bottom-0 right-0 size-4 rounded-full border-4 border-[#1e2738] ${member.status === 'online' ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+                </div>
+                <div className="text-center w-full">
+                  <p className="text-white font-black text-lg truncate">{member.name}</p>
+                  <div className="flex items-center justify-center gap-1 text-slate-400 text-xs mt-1 font-bold">
+                    <span className="material-symbols-outlined text-[14px]">near_me</span> {member.distance}
                   </div>
                 </div>
               </div>
-            ))}
-
-            <div className="absolute bottom-8 right-8 space-y-3">
-              <button className="bg-white text-slate-900 p-4 rounded-3xl shadow-2xl flex items-center gap-3 font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all">
-                <Globe className="w-4 h-4" />
-                Sat View
-              </button>
+              <div className="w-full h-px bg-slate-700 my-4"></div>
+              <div className="flex items-center justify-between w-full">
+                <div className="flex flex-col items-center opacity-60">
+                  <span className="material-symbols-outlined text-[16px]">footprint</span>
+                  <span className="text-[10px] font-mono font-bold tracking-widest">{member.steps}</span>
+                </div>
+                <button className="size-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+                  <span className="material-symbols-outlined text-[20px]">call</span>
+                </button>
+              </div>
             </div>
+          ))}
+          <div className="snap-start flex flex-col items-center justify-center p-6 rounded-[2rem] bg-slate-800/30 min-w-[120px] border-2 border-dashed border-[#2d3a54] group cursor-pointer hover:bg-slate-800 transition-all">
+            <div className="size-12 rounded-full bg-[#232f48] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+              <span className="material-symbols-outlined text-slate-500">add</span>
+            </div>
+            <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Invite</p>
           </div>
         </div>
       </div>
+
+      <button className="relative w-full overflow-hidden rounded-[2.5rem] bg-red-600 h-24 shadow-2xl active:scale-[0.98] transition-all group">
+        <div className="absolute inset-0 bg-red-600 animate-pulse opacity-30"></div>
+        <div className="relative flex items-center justify-between px-8 h-full z-10">
+          <div className="flex items-center gap-5">
+            <div className="bg-white/20 p-3 rounded-full backdrop-blur-sm animate-bounce">
+              <span className="material-symbols-outlined text-white text-[40px]">sos</span>
+            </div>
+            <div className="text-left text-white">
+              <p className="text-2xl font-black tracking-widest">SOS ALERT</p>
+              <p className="text-red-100 text-xs font-bold uppercase tracking-wider">Long press 3s for police</p>
+            </div>
+          </div>
+          <span className="material-symbols-outlined text-white/60 text-4xl group-hover:translate-x-2 transition-transform">keyboard_double_arrow_right</span>
+        </div>
+      </button>
     </div>
   );
 };

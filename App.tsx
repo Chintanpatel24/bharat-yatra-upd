@@ -36,7 +36,8 @@ const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showSOS, setShowSOS] = useState(false);
   const [location, setLocation] = useState<{lat: number, lng: number} | null>(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Changed default state to true for dark mode initialization
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
     if (navigator.geolocation) {

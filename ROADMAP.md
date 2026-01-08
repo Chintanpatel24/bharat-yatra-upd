@@ -14,3 +14,4 @@ Planned evolution may include:
 ## Important Note
 All items listed here are tentative and subject to change based on
 technical feasibility, user feedback, and project priorities.
+
